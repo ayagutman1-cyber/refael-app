@@ -1,69 +1,90 @@
 import streamlit as st
 
 # הגדרות דף
-st.set_page_config(page_title="Executive Briefing 2026", page_icon="📈", layout="centered")
+st.set_page_config(page_title="Rafael Directors Hub", page_icon="🛡️", layout="centered")
 
-# עיצוב RTL לרפאל
+# עיצוב RTL נקי
 st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Assistant:wght@400;700&display=swap');
-    html, body, [data-testid="stSidebar"] {
+    html, body, [data-testid="stSidebar"], .stApp {
         font-family: 'Assistant', sans-serif;
         direction: rtl;
         text-align: right;
     }
-    .main { background-color: #f0f2f6; }
-    div.stButton > button:first-child {
-        background-color: #003366;
-        color: white;
-        border-radius: 12px;
-        height: 3.5em;
-        width: 100%;
-        border: none;
+    .stTabs [data-baseweb="tab-list"] { gap: 10px; }
+    .stTabs [data-baseweb="tab"] {
+        background-color: #f0f2f6;
+        border-radius: 10px 10px 0 0;
+        padding: 10px 20px;
     }
-    .stExpander { background-color: white; border-radius: 12px; border: 1px solid #ddd; margin-bottom: 10px; }
-    h1, h2, h3 { color: #003366; text-align: center; }
+    .concept-card {
+        background-color: #ffffff;
+        padding: 15px;
+        border-right: 5px solid #003366;
+        border-radius: 5px;
+        margin-bottom: 10px;
+        box-shadow: 2px 2px 5px rgba(0,0,0,0.05);
+    }
     </style>
     """, unsafe_allow_html=True)
 
-st.title("מרכז למידה לדירקטורים - רפאל")
-st.subheader("ברוכה הבאה, איה | גרסת MVP 1.0")
+st.title("מרכז למידה דיגיטלי לדירקטורים | רפאל")
+st.write("---")
 
-tabs = st.tabs(["🎧 האזנה (Listen)", "📖 קריאה (Read)", "🧠 תרגול (Solve)"])
+# יצירת שלוש הקוביות המרכזיות כטאבים
+tabs = st.tabs(["⚖️ רגולציה וחוקיות", "📊 נהלי בקרה ודיווח", "🧠 קבלת החלטות"])
 
+# --- נושא 1: רגולציה וחוקיות ---
 with tabs[0]:
-    st.info("פודקאסטים קצרים (3-5 דקות) לעדכון בדרכים")
-    st.write("---")
-    st.write("🎙️ **פרק 1:** עדכוני רגולציה - מרץ 2026")
-    st.audio("https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3")
-    st.write("🎙️ **פרק 2:** ניהול סיכונים בשרשרת האספקה")
-    st.audio("https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3")
+    st.markdown("### מאגר מושגים: רגולציה וחוקיות")
+    st.info("לחצי על המושג כדי להרחיב את ההסבר המפורט")
+    
+    with st.expander("📌 חובת הזהירות (Duty of Care)"):
+        st.write("**המושג:** דרישה מהדירקטור לפעול במיומנות וסבירות.")
+        st.write("**הסבר מפורט:** על הדירקטור לקבל החלטות על בסיס מידע מלא, לבחון חלופות ולהתייעץ עם מומחים במידת הצורך כדי למנוע רשלנות בניהול נכסי החברה.")
 
+    with st.expander("📌 חובת האמונים (Duty of Loyalty)"):
+        st.write("**המושג:** עשיית פעולות לטובת החברה בלבד.")
+        st.write("**הסבר מפורט:** איסור על ניצול הזדמנות עסקית של החברה לטובת רווח אישי וקביעת מנגנונים למניעת ניגוד עניינים.")
+
+    with st.expander("📌 [מושג נוסף - להשלמה לעתיד]"):
+        st.write("כאן יתווספו תכנים רגולטוריים נוספים בהתאם לעדכוני החקיקה האחרונים.")
+
+# --- נושא 2: נהלי בקרה ודיווח ---
 with tabs[1]:
-    st.write("### כרטיסיות ידע ממוקדות")
-    with st.expander("📌 כרטיסיית 1: ניגוד עניינים"):
-        st.write("דירקטור חייב להימנע מכל מצב של ניגוד עניינים בין טובתו האישית לבין טובת החברה.")
-    with st.expander("📌 כרטיסיית 2: חובת הזהירות"):
-        st.write("על הדירקטור לפעול ברמת מיומנות שדירקטור סביר היה פועל בה בנסיבות דומות.")
-    with st.expander("📌 כרטיסיית 3: דוחות כספיים"):
-        st.write("אחריות הדירקטוריון היא לוודא כי הדוחות משקפים באופן נאות את המצב הכספי.")
+    st.markdown("### מאגר מושגים: נהלי בקרה ודיווח")
+    
+    with st.expander("📊 דוחות כספיים רבעוניים"):
+        st.write("**המושג:** אחריות הדירקטוריון על נאותות הדיווח.")
+        st.write("**הסבר מפורט:** בחינת הרווח וההפסד, תזרים המזומנים ווידוא שהנתונים משקפים את המציאות הכלכלית של הארגון ללא הצגות מטעות.")
 
+    with st.expander("📊 ועדת ביקורת (Audit Committee)"):
+        st.write("**המושג:** הגוף המפקח על הבקרה הפנימית.")
+        st.write("**הסבר מפורט:** תפקיד הוועדה לבחון ליקויים בניהול העסקי של החברה ולהציע דרכים לתיקונם בשיתוף המבקר הפנימי.")
+
+    with st.expander("📊 [קוביה ריקה להרחבה]"):
+        st.write("בשלב הייצור, כאן יוטמעו נהלי הדיווח הספציפיים של רפאל.")
+
+# --- נושא 3: תהליכי קבלת החלטות ---
 with tabs[2]:
-    st.write("### סימולציית דילמה ניהולית")
-    st.markdown("> **הסיטואציה:** חברה בבעלות קרוב משפחה של אחד מחברי הדירקטוריון מגישה הצעה למכרז משמעותי ברפאל.")
+    st.markdown("### מאגר מושגים: קבלת החלטות ארגונית")
     
-    choice = st.radio("מה על הדירקטור לעשות?", [
-        "להשתתף בישיבה כרגיל אך להימנע מהצבעה",
-        "לדווח מיד על הקשר האישי ולצאת מהחדר בזמן הדיון וההצבעה",
-        "לא לעשות כלום, המכרז מנוהל על ידי הדרג המקצועי"
-    ])
-    
-    if st.button("בדיקת תשובה"):
-        if "לדווח מיד" in choice:
-            st.success("נכון מאוד! שקיפות מלאה ויציאה מהחדר הן הדרך למנוע חשש לניגוד עניינים.")
-        else:
-            st.error("טעות. השתתפות בדיון, גם ללא הצבעה, עלולה להשפיע על מקבלי ההחלטות.")
-            st.warning("מומלץ לעיין שוב בכרטיסיית 'ניגוד עניינים' בלשונית קריאה.")
+    with st.expander("🧠 שיקול דעת עסקי (Business Judgment Rule)"):
+        st.write("**המושג:** הגנה משפטית על החלטות שהתקבלו בתום לב.")
+        st.write("**הסבר מפורט:** בתי המשפט לא יתערבו בהחלטה עסקית של דירקטור אם הוכח שהיא התקבלה באופן מיודע, ללא ניגוד עניינים ובתום לב לטובת התאגיד.")
+
+    with st.expander("🧠 ניהול סיכונים אסטרטגי"):
+        st.write("**המושג:** שקלול סיכונים מול הזדמנויות.")
+        st.write("**הסבר מפורט:** תהליך קבלת החלטות הכולל מיפוי סיכונים (פיננסיים, תפעוליים, תדמיתיים) וקביעת רמת התיאבון לסיכון של הארגון.")
+
+    with st.expander("🧠 [קוביה ריקה להרחבה]"):
+        st.write("כאן יפותחו סימולציות לקבלת החלטות במצבי משבר.")
+
+st.sidebar.title("עזרים לדירקטור")
+st.sidebar.markdown("### 🎙️ פודקאסט AI (NotebookLM)")
+st.sidebar.info("פרק שבועי: 'ניתוח רגולציה 2026' - נוצר אוטומטית ממסמכי המדיניות.")
+st.sidebar.audio("https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3")
 
 st.divider()
-st.caption("מערכת ליווי דירקטורים | רפאל מערכות לחימה מתקדמות")
+st.caption("מערכת ליווי דירקטורים | גרסת אב-טיפוס פדגוגית")
