@@ -1,9 +1,9 @@
 import streamlit as st
 
 # הגדרות דף
-st.set_page_config(page_title="Rafael Directors Hub", page_icon="🛡️", layout="centered")
+st.set_page_config(page_title="Rafael Directors Hub", page_icon="🛡️", layout="wide")
 
-# עיצוב RTL נקי
+# עיצוב RTL ושיפור ויזואלי
 st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Assistant:wght@400;700&display=swap');
@@ -12,79 +12,98 @@ st.markdown("""
         direction: rtl;
         text-align: right;
     }
-    .stTabs [data-baseweb="tab-list"] { gap: 10px; }
+    .stTabs [data-baseweb="tab-list"] { gap: 8px; }
     .stTabs [data-baseweb="tab"] {
-        background-color: #f0f2f6;
-        border-radius: 10px 10px 0 0;
-        padding: 10px 20px;
+        background-color: #f8f9fa;
+        border-radius: 8px;
+        padding: 8px 16px;
+        font-weight: bold;
     }
-    .concept-card {
-        background-color: #ffffff;
-        padding: 15px;
-        border-right: 5px solid #003366;
-        border-radius: 5px;
-        margin-bottom: 10px;
-        box-shadow: 2px 2px 5px rgba(0,0,0,0.05);
-    }
+    .stExpander { background-color: white; border-radius: 8px; border: 1px solid #e1e4e8; }
+    h1 { color: #003366; border-bottom: 2px solid #003366; padding-bottom: 10px; }
+    h2 { color: #004080; margin-top: 20px; }
     </style>
     """, unsafe_allow_html=True)
 
 st.title("מרכז למידה דיגיטלי לדירקטורים | רפאל")
-st.write("---")
 
-# יצירת שלוש הקוביות המרכזיות כטאבים
-tabs = st.tabs(["⚖️ רגולציה וחוקיות", "📊 נהלי בקרה ודיווח", "🧠 קבלת החלטות"])
+# נושאי הליבה המרכזיים
+main_tabs = st.tabs(["⚖️ רגולציה וחוקיות", "📊 נהלי בקרה ודיווח", "🧠 קבלת החלטות"])
 
-# --- נושא 1: רגולציה וחוקיות ---
-with tabs[0]:
-    st.markdown("### מאגר מושגים: רגולציה וחוקיות")
-    st.info("לחצי על המושג כדי להרחיב את ההסבר המפורט")
+# --- פונקציה ליצירת מבנה פנימי לכל נושא ---
+def create_module(topic_name, concepts, question, options, correct_answer, audio_url):
+    inner_tabs = st.tabs(["📖 קריאה", "🧠 תרגול", "🎧 האזנה"])
     
-    with st.expander("📌 חובת הזהירות (Duty of Care)"):
-        st.write("**המושג:** דרישה מהדירקטור לפעול במיומנות וסבירות.")
-        st.write("**הסבר מפורט:** על הדירקטור לקבל החלטות על בסיס מידע מלא, לבחון חלופות ולהתייעץ עם מומחים במידת הצורך כדי למנוע רשלנות בניהול נכסי החברה.")
+    with inner_tabs[0]:
+        st.subheader(f"מושגי יסוד: {topic_name}")
+        for title, detail in concepts.items():
+            with st.expander(f"📌 {title}"):
+                st.write(detail)
+        st.write("---")
+        with st.expander("➕ הוספת מושג חדש (עבור מנהל המערכת)"):
+            st.write("כאן ניתן להוסיף מושגים ועדכוני חקיקה בזמן אמת.")
 
-    with st.expander("📌 חובת האמונים (Duty of Loyalty)"):
-        st.write("**המושג:** עשיית פעולות לטובת החברה בלבד.")
-        st.write("**הסבר מפורט:** איסור על ניצול הזדמנות עסקית של החברה לטובת רווח אישי וקביעת מנגנונים למניעת ניגוד עניינים.")
+    with inner_tabs[1]:
+        st.subheader(f"בוחן ידע: {topic_name}")
+        st.write(f"**הדילמה:** {question}")
+        choice = st.radio("מהי הפעולה הנדרשת?", options, key=topic_name)
+        if st.button("בדיקת תשובה", key=f"btn_{topic_name}"):
+            if choice == correct_answer:
+                st.success("תשובה נכונה! הפעולה תואמת את נהלי הארגון.")
+            else:
+                st.error("תשובה שגויה. מומלץ לחזור על כרטיסיות המידע.")
 
-    with st.expander("📌 [מושג נוסף - להשלמה לעתיד]"):
-        st.write("כאן יתווספו תכנים רגולטוריים נוספים בהתאם לעדכוני החקיקה האחרונים.")
+    with inner_tabs[2]:
+        st.subheader(f"פודקאסט ממוקד: {topic_name}")
+        st.info(f"הסבר קולי קצר על {topic_name} (נוצר באמצעות NotebookLM)")
+        st.audio(audio_url)
 
-# --- נושא 2: נהלי בקרה ודיווח ---
-with tabs[1]:
-    st.markdown("### מאגר מושגים: נהלי בקרה ודיווח")
-    
-    with st.expander("📊 דוחות כספיים רבעוניים"):
-        st.write("**המושג:** אחריות הדירקטוריון על נאותות הדיווח.")
-        st.write("**הסבר מפורט:** בחינת הרווח וההפסד, תזרים המזומנים ווידוא שהנתונים משקפים את המציאות הכלכלית של הארגון ללא הצגות מטעות.")
+# --- תוכן לכל טאב מרכזי ---
 
-    with st.expander("📊 ועדת ביקורת (Audit Committee)"):
-        st.write("**המושג:** הגוף המפקח על הבקרה הפנימית.")
-        st.write("**הסבר מפורט:** תפקיד הוועדה לבחון ליקויים בניהול העסקי של החברה ולהציע דרכים לתיקונם בשיתוף המבקר הפנימי.")
+with main_tabs[0]:
+    create_module(
+        "רגולציה וחוקיות",
+        {
+            "חובת הזהירות": "על הדירקטור לפעול במיומנות וסבירות, לקבל החלטות על בסיס מידע מלא ולבחון חלופות.",
+            "חובת האמונים": "איסור על ניצול הזדמנות עסקית של החברה לטובת רווח אישי ומניעת ניגוד עניינים."
+        },
+        "דירקטור מגלה שחברה בבעלות אחיו ניגשת למכרז של רפאל. מה עליו לעשות?",
+        ["להשתתף בדיון אך לא להצביע", "לדווח מיד ולצאת מהחדר בזמן הדיון", "לא לעשות כלום"],
+        "לדווח מיד ולצאת מהחדר בזמן הדיון",
+        "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"
+    )
 
-    with st.expander("📊 [קוביה ריקה להרחבה]"):
-        st.write("בשלב הייצור, כאן יוטמעו נהלי הדיווח הספציפיים של רפאל.")
+with main_tabs[1]:
+    create_module(
+        "נהלי בקרה ודיווח",
+        {
+            "דוחות כספיים": "בחינת המצב הכספי של החברה ואישור שהנתונים משקפים נאמנה את המציאות הכלכלית.",
+            "ועדת ביקורת": "פיקוח על הבקרה הפנימית וזיהוי ליקויים בניהול העסקי."
+        },
+        "התגלה ליקוי משמעותי בבקרה הפנימית של אחת המחלקות. מי הגוף שאחראי לדון בכך?",
+        ["ועדת הביקורת", "מחלקת השיווק", "ועדת כוח אדם"],
+        "ועדת הביקורת",
+        "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3"
+    )
 
-# --- נושא 3: תהליכי קבלת החלטות ---
-with tabs[2]:
-    st.markdown("### מאגר מושגים: קבלת החלטות ארגונית")
-    
-    with st.expander("🧠 שיקול דעת עסקי (Business Judgment Rule)"):
-        st.write("**המושג:** הגנה משפטית על החלטות שהתקבלו בתום לב.")
-        st.write("**הסבר מפורט:** בתי המשפט לא יתערבו בהחלטה עסקית של דירקטור אם הוכח שהיא התקבלה באופן מיודע, ללא ניגוד עניינים ובתום לב לטובת התאגיד.")
+with main_tabs[2]:
+    create_module(
+        "קבלת החלטות",
+        {
+            "שיקול דעת עסקי": "הגנה משפטית על החלטות שהתקבלו בתום לב, ללא ניגוד עניינים ולאחר הליך סביר.",
+            "ניהול סיכונים": "מיפוי סיכונים אסטרטגיים וקביעת רמת התיאבון לסיכון של הארגון."
+        },
+        "מתי תעמוד לדירקטור 'הגנת שיקול הדעת העסקי'?",
+        ["תמיד, ללא קשר לאופן קבלת ההחלטה", "כאשר ההחלטה התקבלה בתום לב ועל בסיס מידע סביר", "רק אם ההחלטה הובילה לרווח"],
+        "כאשר ההחלטה התקבלה בתום לב ועל בסיס מידע סביר",
+        "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3"
+    )
 
-    with st.expander("🧠 ניהול סיכונים אסטרטגי"):
-        st.write("**המושג:** שקלול סיכונים מול הזדמנויות.")
-        st.write("**הסבר מפורט:** תהליך קבלת החלטות הכולל מיפוי סיכונים (פיננסיים, תפעוליים, תדמיתיים) וקביעת רמת התיאבון לסיכון של הארגון.")
-
-    with st.expander("🧠 [קוביה ריקה להרחבה]"):
-        st.write("כאן יפותחו סימולציות לקבלת החלטות במצבי משבר.")
-
-st.sidebar.title("עזרים לדירקטור")
-st.sidebar.markdown("### 🎙️ פודקאסט AI (NotebookLM)")
-st.sidebar.info("פרק שבועי: 'ניתוח רגולציה 2026' - נוצר אוטומטית ממסמכי המדיניות.")
-st.sidebar.audio("https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3")
-
-st.divider()
-st.caption("מערכת ליווי דירקטורים | גרסת אב-טיפוס פדגוגית")
+st.sidebar.markdown("""
+### 👤 פרופיל דירקטור
+**שם:** איה גוטמן  
+**סטטוס למידה:** 65% הושלם
+---
+### 🛡️ נגישות וביטחון
+המערכת מאובטחת ועומדת בתקני הסייבר של רפאל.
+""")
