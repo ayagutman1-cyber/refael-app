@@ -99,11 +99,4 @@ with main_tabs[2]:
         "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3"
     )
 
-st.sidebar.markdown("""
-### 👤 פרופיל דירקטור
-**שם:** איה גוטמן  
-**סטטוס למידה:** 65% הושלם
----
-### 🛡️ נגישות וביטחון
-המערכת מאובטחת ועומדת בתקני הסייבר של רפאל.
-""")
+
